@@ -1,10 +1,13 @@
 package com.news.portal.controllers;
 
+import com.news.portal.dto.CommentDTO;
 import com.news.portal.models.Comment;
 import com.news.portal.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
 @RestController
@@ -21,8 +24,10 @@ public class CommentController {
 
     @PostMapping("/{newsId}")
     public ResponseEntity<?> createComment(@PathVariable Long newsId,
-                                           @RequestBody Comment comment) {
-        return ResponseEntity.ok().body(commentService.createComment(newsId, comment));
+                                           @RequestBody CommentDTO commentDTO,
+                                           Principal principal) {
+        String username = principal.getName();
+        return ResponseEntity.ok().body(commentService.createComment(username, newsId, commentDTO));
     }
 
     @PutMapping("/{commentId}")
