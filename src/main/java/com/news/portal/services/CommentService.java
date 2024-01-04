@@ -25,7 +25,7 @@ public class CommentService {
     private final NewsService newsService;
     public Comment findCommentById(Long id) {
         return commentRepository.findCommentById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Коменнтарий с id = " + id + " не найден!"));
+                .orElseThrow(() -> new EntityNotFoundException("The comment with id = " + id + " was not found!"));
     }
     public Comment createComment(String authorName, Long newsId, CommentDTO commentDTO) {
         User author = (User) userService.loadUserByUsername(authorName);
@@ -42,13 +42,13 @@ public class CommentService {
             return commentRepository.save(comment);
 
         } catch (RuntimeException e) {
-            log.error("Комментарий {} не сохранён. Error: [{}]", comment.getAuthor(), e);
-            throw new PersistenceException(String.format("Комментарий %s не сохранён. Error: [%s].", comment.getId(), e));
+            log.error("Сomment {} has not been saved. Error: [{}]", comment.getAuthor(), e);
+            throw new PersistenceException(String.format("Comment %s has not been saved. Error: [%s].", comment.getId(), e));
         }
     }
     public Comment updateComment(String username, Long commentId, CommentDTO commentDTO) {
         if (matchersUser(username, commentId))
-            throw new CommentException(String.format("Пользователь %s не может отредактировать комментарий с id = %d!",
+            throw new CommentException(String.format("User %s cannot edit a comment with id = %d!",
                     username, commentId));
 
         Comment comment = findCommentById(commentId);
@@ -56,17 +56,17 @@ public class CommentService {
         return save(comment);
     }
     /**
-     * Проверка, что комментарий соответствует пользователю с указанным username и что комментарий существует
+     * Checking that the comment corresponds to the user with the specified username and that the comment exists.
      *
-     * @param username  - имя пользователя, создавшего комментарий
-     * @param commentId - id комментария
+     * @param username  - the username of the comment creator
+     * @param commentId - comment id
      */
     public boolean matchersUser(String username, Long commentId) {
         return username.equals(findCommentById(commentId).getAuthor().getUsername()) && commentRepository.existsById(commentId);
     }
     public void deleteById(String username, Long commentId) {
         if (!matchersUser(username, commentId))
-            throw new CommentException(String.format("Пользователь %s не может удалить комментарий с id = %d!",
+            throw new CommentException(String.format("User %s cannot delete a comment with id = %d!",
                     username, commentId));
 
         commentRepository.deleteById(commentId);
