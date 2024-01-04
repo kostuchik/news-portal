@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 
+
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -31,14 +32,18 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<?> editComment(@PathVariable Long commentId,
-                                         @RequestBody Comment comment) {
-        return ResponseEntity.ok().body(commentService.updateComment( commentId, comment));
+    public ResponseEntity<?> updateComment(@PathVariable Long commentId,
+                                           @RequestBody CommentDTO commentDTO,
+                                           Principal principal) {
+        String username = principal.getName();
+        return ResponseEntity.ok().body(commentService.updateComment(username, commentId, commentDTO));
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteById(commentId);
-        return ResponseEntity.ok().body("User's has been delete.");
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId, Principal principal) {
+        String username = principal.getName();
+        commentService.deleteById(username, commentId);
+        return ResponseEntity.ok().body("Комментарий пользователя " + username + " удалён.");
     }
+
 }
