@@ -53,7 +53,7 @@ public class AuthService {
         User user = new User(registrationRequest);
 
         if (userRepository.existsByUsername(registrationRequest.getUsername())) {
-            throw new EntityExistsException("Пользователь " + registrationRequest.getUsername() + " уже существует!");
+            throw new EntityExistsException("The user " + registrationRequest.getUsername() + " already exists!");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -61,7 +61,7 @@ public class AuthService {
         Set<Role> roles = registrationRequest.getRoles().stream()
                 .map(r -> roleRepository.findByRoleName(r)
                         .orElseThrow(() ->
-                                new EntityNotFoundException("Роль " + r.name() + " не найдена!")))
+                                new EntityNotFoundException( r.name() + " role was not found!")))
                 .collect(Collectors.toSet());
 
         user.setRoles(roles);

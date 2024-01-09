@@ -43,7 +43,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable Long commentId, Principal principal) {
         String username = principal.getName();
         commentService.deleteById(username, commentId);
-        return ResponseEntity.ok().body("Комментарий пользователя " + username + " удалён.");
+        return ResponseEntity.ok().body("The comment has been deleted");
     }
 
 }
