@@ -1,8 +1,8 @@
 package com.news.portal.services.files;
 
 
-import com.news.portal.exception.custom_exception.custom_exception.FileFormatException;
-import com.news.portal.exception.custom_exception.custom_exception.FileStorageException;
+import com.news.portal.exception.custom_exception.FileFormatException;
+import com.news.portal.exception.custom_exception.FileStorageException;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

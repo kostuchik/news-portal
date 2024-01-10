@@ -1,4 +1,4 @@
-package com.news.portal.exception.custom_exception.custom_exception;
+package com.news.portal.exception.custom_exception;
 
 public class FileFormatException extends RuntimeException {
 
