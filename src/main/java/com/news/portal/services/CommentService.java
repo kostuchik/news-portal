@@ -1,7 +1,7 @@
 package com.news.portal.services;
 
 import com.news.portal.dto.CommentDTO;
-import com.news.portal.exception.custom_exception.CommentException;
+import com.news.portal.exception.custom_exception.custom_exception.CommentException;
 import com.news.portal.models.Comment;
 import com.news.portal.models.User;
 import com.news.portal.repositories.CommentRepository;

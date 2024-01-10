@@ -3,6 +3,7 @@ package com.news.portal.services;
 import com.news.portal.models.User;
 import com.news.portal.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,20 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new EntityNotFoundException("The user with the username " + username + " was not found!"));
+    }
+    public void loadAvatar(String username, String uri) {
+        User user = findUserByUsername(username);
+        user.setAvatar(uri);
+        saveUser(user);
+    }
+    public User saveUser(User user) {
+        try {
+            return userRepository.save(user);
+
+        } catch (RuntimeException e) {
+            log.error("Пользователь {} не сохранён! Error: [{}].", user.getUsername(), e);
+            throw new PersistenceException(String.format("Пользователь %s не сохранён! " +
+                    "Error: [%s]", user.getUsername(), e));
+        }
     }
 }
