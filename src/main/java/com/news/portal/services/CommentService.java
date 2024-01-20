@@ -10,6 +10,8 @@ import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,6 +25,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final NewsService newsService;
+    public Page<Comment> getComments(Long newsId, Pageable pageable) {
+        return commentRepository.findAllByNews_Id(newsId, pageable);
+    }
     public Comment findCommentById(Long id) {
         return commentRepository.findCommentById(id)
                 .orElseThrow(() -> new EntityNotFoundException("The comment with id = " + id + " was not found!"));
