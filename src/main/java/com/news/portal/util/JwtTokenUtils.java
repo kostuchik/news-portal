@@ -1,4 +1,4 @@
-package com.news.news.util;
+package com.news.portal.util;
 
 
 import io.jsonwebtoken.Claims;
