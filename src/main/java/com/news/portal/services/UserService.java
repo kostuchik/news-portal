@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Пользователь с именем " + username + " не найден!"));
+                        new EntityNotFoundException("User with username " + username + " was not found!"));
     }
 
     public Page<User> searchUserByText(String text, Pageable pageable) {
@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
 
     public User findUserById(long id) {
         return userRepository.findUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id = " + id + "не найден!"));
+                .orElseThrow(() -> new EntityNotFoundException("User with username = " + id + "was not found!"));
     }
 
 
@@ -67,8 +67,8 @@ public class UserService implements UserDetailsService {
             return userRepository.save(user);
 
         } catch (RuntimeException e) {
-            log.error("Пользователь {} не сохранён! Error: [{}].", user.getUsername(), e);
-            throw new PersistenceException(String.format("Пользователь %s не сохранён! " +
+            log.error("User {} not saved! Error: [{}].", user.getUsername(), e);
+            throw new PersistenceException(String.format("User %s not saved! " +
                     "Error: [%s]", user.getUsername(), e));
         }
     }
@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsByUsername(username)) {
             userRepository.deleteByUsername(username);
 
-        } else throw new EntityNotFoundException("Пользователь с именем \"" + username + "\" не найден!");
+        } else throw new EntityNotFoundException("User with username \"" + username + "\" not found!");
     }
 
     public void loadAvatar(String username, String uri) {
