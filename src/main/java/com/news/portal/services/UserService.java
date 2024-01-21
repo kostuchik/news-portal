@@ -1,5 +1,6 @@
 package com.news.portal.services;
 
+import com.news.portal.dto.UserUpdateRequest;
 import com.news.portal.models.User;
 import com.news.portal.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -7,6 +8,8 @@ import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,8 +23,8 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-
 public class UserService implements UserDetailsService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -38,16 +41,27 @@ public class UserService implements UserDetailsService {
                         collect(Collectors.toList())
         );
     }
+
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("The user with the username " + username + " was not found!"));
+                        new EntityNotFoundException("Пользователь с именем " + username + " не найден!"));
     }
-    public void loadAvatar(String username, String uri) {
-        User user = findUserByUsername(username);
-        user.setAvatar(uri);
-        saveUser(user);
+
+    public Page<User> searchUserByText(String text, Pageable pageable) {
+        return userRepository.searchUserByText(text, pageable);
     }
+
+    public User findUserById(long id) {
+        return userRepository.findUserById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id = " + id + "не найден!"));
+    }
+
+
+    public Page<User> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
     public User saveUser(User user) {
         try {
             return userRepository.save(user);
@@ -57,5 +71,27 @@ public class UserService implements UserDetailsService {
             throw new PersistenceException(String.format("Пользователь %s не сохранён! " +
                     "Error: [%s]", user.getUsername(), e));
         }
+    }
+
+    public User updateUser(String username, UserUpdateRequest request) {
+        User user = findUserByUsername(username);
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return saveUser(user);
+    }
+
+    public void deleteUser(String username) {
+        if (userRepository.existsByUsername(username)) {
+            userRepository.deleteByUsername(username);
+
+        } else throw new EntityNotFoundException("Пользователь с именем \"" + username + "\" не найден!");
+    }
+
+    public void loadAvatar(String username, String uri) {
+        User user = findUserByUsername(username);
+        user.setAvatar(uri);
+        saveUser(user);
     }
 }
