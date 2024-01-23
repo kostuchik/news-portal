@@ -1,5 +1,6 @@
 package com.news.portal.services;
 
+
 import com.news.portal.dto.LoginRequest;
 import com.news.portal.dto.LoginResponse;
 import com.news.portal.dto.UserDataRequest;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +55,7 @@ public class AuthService {
         User user = new User(registrationRequest);
 
         if (userRepository.existsByUsername(registrationRequest.getUsername())) {
-            throw new EntityExistsException("The user " + registrationRequest.getUsername() + " already exists!");
+            throw new EntityExistsException("Пользователь " + registrationRequest.getUsername() + " уже существует!");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -61,7 +63,7 @@ public class AuthService {
         Set<Role> roles = registrationRequest.getRoles().stream()
                 .map(r -> roleRepository.findByRoleName(r)
                         .orElseThrow(() ->
-                                new EntityNotFoundException( r.name() + " role was not found!")))
+                                new EntityNotFoundException("Роль " + r.name() + " не найдена!")))
                 .collect(Collectors.toSet());
 
         user.setRoles(roles);

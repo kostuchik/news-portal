@@ -1,5 +1,6 @@
 package com.news.portal.services;
 
+
 import com.news.portal.dto.UserUpdateRequest;
 import com.news.portal.models.User;
 import com.news.portal.repositories.UserRepository;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -45,7 +47,7 @@ public class UserService implements UserDetailsService {
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("User with username " + username + " was not found!"));
+                        new EntityNotFoundException("Пользователь с именем " + username + " не найден!"));
     }
 
     public Page<User> searchUserByText(String text, Pageable pageable) {
@@ -54,7 +56,7 @@ public class UserService implements UserDetailsService {
 
     public User findUserById(long id) {
         return userRepository.findUserById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with username = " + id + "was not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id = " + id + "не найден!"));
     }
 
 
@@ -67,8 +69,8 @@ public class UserService implements UserDetailsService {
             return userRepository.save(user);
 
         } catch (RuntimeException e) {
-            log.error("User {} not saved! Error: [{}].", user.getUsername(), e);
-            throw new PersistenceException(String.format("User %s not saved! " +
+            log.error("Пользователь {} не сохранён! Error: [{}].", user.getUsername(), e);
+            throw new PersistenceException(String.format("Пользователь %s не сохранён! " +
                     "Error: [%s]", user.getUsername(), e));
         }
     }
@@ -86,7 +88,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsByUsername(username)) {
             userRepository.deleteByUsername(username);
 
-        } else throw new EntityNotFoundException("User with username \"" + username + "\" not found!");
+        } else throw new EntityNotFoundException("Пользователь с именем \"" + username + "\" не найден!");
     }
 
     public void loadAvatar(String username, String uri) {
