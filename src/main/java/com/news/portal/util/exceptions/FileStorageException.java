@@ -1,4 +1,4 @@
-package com.news.portal.exception.custom_exception;
+package com.news.portal.util.exceptions;
 
 public class FileStorageException extends RuntimeException {
 

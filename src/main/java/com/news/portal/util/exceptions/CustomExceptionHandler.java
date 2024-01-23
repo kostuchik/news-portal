@@ -1,9 +1,9 @@
-package com.news.portal.exception;
+package com.news.portal.util.exceptions;
 
 
-import com.news.portal.exception.custom_exception.CommentException;
-import com.news.portal.exception.custom_exception.FileFormatException;
-import com.news.portal.exception.custom_exception.FileStorageException;
+import com.news.portal.util.exceptions.CommentException;
+import com.news.portal.util.exceptions.FileFormatException;
+import com.news.portal.util.exceptions.FileStorageException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceException;
